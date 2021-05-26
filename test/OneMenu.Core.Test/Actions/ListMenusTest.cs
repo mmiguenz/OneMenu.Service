@@ -6,7 +6,7 @@ using OneMenu.Core.actions;
 using OneMenu.Core.Model;
 using Xunit;
 
-namespace OneMenu.Core.Test
+namespace OneMenu.Core.Test.Actions
 {
     public class ListMenusTest
     {
