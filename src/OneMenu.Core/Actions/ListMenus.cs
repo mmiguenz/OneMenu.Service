@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using OneMenu.Core.Model;
+using OneMenu.Core.Repositories;
 
 namespace OneMenu.Core.actions
 {
@@ -17,10 +18,5 @@ namespace OneMenu.Core.actions
             var menus = await _menuRepository.GetAll();
             return menus;
         }
-    }
-
-    public interface IMenuRepository
-    {
-        Task<IEnumerable<Menu>> GetAll();
     }
 }

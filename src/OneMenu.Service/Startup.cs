@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using OneMenu.Core.actions;
+using OneMenu.Core.Repositories;
 using OneMenu.Data.AutoMapper;
 using OneMenu.Data.Repositories;
 
@@ -52,7 +53,6 @@ namespace OneMenu.Service
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OneMenu.Service v1"));
             }
-
             app.UseHttpsRedirection();
 
             app.UseRouting();

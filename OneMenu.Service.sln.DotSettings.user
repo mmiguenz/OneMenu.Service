@@ -1,6 +1,13 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=da309d05_002D866e_002D4625_002D81a6_002D177995a0f253/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ListMenusTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::C0E61804-3D7B-4DC9-A5AE-79E884AB3830::net5.0::OneMenu.Core.Test.ListMenusTest&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=46e1aeef_002D8e10_002D4f2e_002Da2aa_002D99ec66018cef/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/home/matias/PPS/github/OneMenu.Service/test/OneMenu.Core.Test" Presentation="&amp;lt;test&amp;gt;\&amp;lt;OneMenu.Core.Test&amp;gt;" /&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=da309d05_002D866e_002D4625_002D81a6_002D177995a0f253/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ListMenusTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Or&gt;
+    &lt;ProjectFile&gt;C0E61804-3D7B-4DC9-A5AE-79E884AB3830/d:Actions/f:ListMenusTest.cs&lt;/ProjectFile&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;xUnit::C0E61804-3D7B-4DC9-A5AE-79E884AB3830::net5.0::OneMenu.Core.Test.Actions.InitTransactionTest&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::C0E61804-3D7B-4DC9-A5AE-79E884AB3830::net5.0::OneMenu.Core.Test.Actions.InitMenuTransactionTest.Init_MenuTransaction_When_Success_Returns_TransactionCreated&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+  &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

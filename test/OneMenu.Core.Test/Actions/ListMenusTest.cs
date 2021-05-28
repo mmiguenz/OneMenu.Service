@@ -1,9 +1,9 @@
-using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
 using OneMenu.Core.actions;
 using OneMenu.Core.Model;
+using OneMenu.Core.Repositories;
 using Xunit;
 
 namespace OneMenu.Core.Test.Actions
@@ -12,12 +12,13 @@ namespace OneMenu.Core.Test.Actions
     {
         private readonly ListMenus _listMenusAction;
         private readonly Mock<IMenuRepository> _menuRepository;
-        private readonly Fixture _fixture = new Fixture();
+        private readonly Fixture _fixture;
 
         public ListMenusTest()
         {
             _menuRepository = new Mock<IMenuRepository>();
             _listMenusAction = new ListMenus(_menuRepository.Object);
+            _fixture = new Fixture();
         }
         [Fact]
         public async Task ListMenus_Returns_A_ListOf_AvailableMenus()
