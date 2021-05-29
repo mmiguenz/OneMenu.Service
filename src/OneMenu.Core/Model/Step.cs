@@ -13,7 +13,13 @@ namespace OneMenu.Core.Model
 
         public IEnumerable<string> Validate(string response)
         {
-            return new List<string>();
+            var validationErrors = new List<string>();
+            if (string.IsNullOrWhiteSpace(response))
+            {
+                validationErrors.Add("Invalid response");
+            }
+
+            return validationErrors;
         }
     }
 }

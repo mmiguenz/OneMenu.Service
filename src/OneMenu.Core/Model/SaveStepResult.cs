@@ -6,7 +6,11 @@ namespace OneMenu.Core.Model
 {
     public class SaveStepResult
     {
-        public bool Success => ValidationErrors.Any();
+        public SaveStepResult()
+        {
+            ValidationErrors = new List<string>();
+        }
+        public bool HasErrors => ValidationErrors.Any();
         public IEnumerable<string> ValidationErrors { get; set; }
         public  Step CurrentStep { get; set; }
         

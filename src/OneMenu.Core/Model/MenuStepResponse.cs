@@ -3,11 +3,16 @@ using System.Linq;
 
 namespace OneMenu.Core.Model
 {
-    public class MenuStepAnswer
+    public class MenuStepResponse
     {
-        public MenuStepAnswer(Step step, string response)
+        public MenuStepResponse()
+        {
+            
+        }
+        public MenuStepResponse(Step step, string response)
         {
             Step = step;
+            Response = response;
             ValidationErrors = step.Validate(response);
         }
         public  Step Step { get; set; }

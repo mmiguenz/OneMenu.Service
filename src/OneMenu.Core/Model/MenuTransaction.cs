@@ -7,19 +7,19 @@ namespace OneMenu.Core.Model
     {
         public MenuTransaction()
         {
-            MenuStepAnswers = new List<MenuStepAnswer>();
+            MenuStepResponses = new List<MenuStepResponse>();
         }
         public string MenuTransactionId { get; set; }
         public string MenuId { get; set; }
 
-        public IEnumerable<MenuStepAnswer> MenuStepAnswers { get; set; }
+        public IEnumerable<MenuStepResponse> MenuStepResponses { get; set; }
 
         public bool IsCompleted
         {
             get
             {
-                return MenuStepAnswers.Any(ms => ms.Step.IsLastStep);
-
+                return MenuStepResponses.Where(s =>!s.HasErrors)
+                                      .Any(ms => ms.Step.IsLastStep);
             }
             
         }
@@ -28,14 +28,20 @@ namespace OneMenu.Core.Model
         {
             get
             {
-                var stepOrdinals = MenuStepAnswers?
+                var stepOrdinals = MenuStepResponses?
                     .Where(m => !m.HasErrors)
                     .Select(m => m.Step.Ordinal);
                     
                 var lastAnsweredStep = stepOrdinals.Any() ? stepOrdinals.Max() : 0;
                 
-                return lastAnsweredStep + 1;
+                return IsCompleted ? lastAnsweredStep : lastAnsweredStep + 1;
             }
+        }
+
+        public void AddStepResponse(MenuStepResponse stepResponse)
+        {
+            var existingStep = MenuStepResponses.FirstOrDefault(sr => sr.Step.Ordinal == stepResponse.Step.Ordinal);
+            MenuStepResponses = MenuStepResponses.Where(sr => sr != existingStep).Append(stepResponse);
         }
     }
 }

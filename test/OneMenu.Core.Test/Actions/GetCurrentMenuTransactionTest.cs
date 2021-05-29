@@ -6,6 +6,7 @@ using OneMenu.Core.actions;
 using OneMenu.Core.Constants;
 using OneMenu.Core.Model;
 using OneMenu.Core.Repositories;
+using OneMenu.Core.Test.util;
 using Xunit;
 
 namespace OneMenu.Core.Test.Actions
@@ -30,7 +31,7 @@ namespace OneMenu.Core.Test.Actions
         {
             var transactionId = _fixture.Create<string>();
 
-            var menu = Data.Menu_Test;
+            var menu = MenuData.Menu_Test;
 
             var menuTransaction = new MenuTransaction()
             {
@@ -38,13 +39,8 @@ namespace OneMenu.Core.Test.Actions
                 MenuTransactionId = transactionId
             };
             
-            _menuTransactionRepository
-                .Setup(r => r.Get(transactionId))
-                .ReturnsAsync((menuTransaction));
-            
-            _menuRepository
-                .Setup(r => r.Get(menu.MenuId))
-                .ReturnsAsync(menu);
+            SetupMenuTransactionRepository_Get(transactionId, menuTransaction);
+            SetupMenuRepository_Get(menu);
 
             var result = await _getCurrentStepMenuTransaction.Execute(transactionId);
             
@@ -57,15 +53,15 @@ namespace OneMenu.Core.Test.Actions
         public async Task When_Transaction_Exists_AndHasFirstAnswerd_Returns_NextNotAnsweredStep()
         {
             var transactionId = _fixture.Create<string>();
-            var menu = Data.Menu_Test;
+            var menu = MenuData.Menu_Test;
 
             var menuTransaction = new MenuTransaction()
             {
                 MenuId = menu.MenuId,
                 MenuTransactionId = transactionId,
-                MenuStepAnswers = new List<MenuStepAnswer>()
+                MenuStepResponses = new List<MenuStepResponse>()
                 {
-                    new MenuStepAnswer(menu.GetStepAt(1), "matias")
+                    new (menu.GetStepAt(1), "matias")
                 }
             };
             
@@ -83,14 +79,14 @@ namespace OneMenu.Core.Test.Actions
         public async Task When_Transaction_Exists_AndHasFirstAnswered_WithErrors_Returns_FirstStep()
         {
             var transactionId = _fixture.Create<string>();
-            var menu = Data.Menu_Test;
-            var stepAnsweredWithErrors = new MenuStepAnswer(menu.GetStepAt(1), "matias");
+            var menu = MenuData.Menu_Test;
+            var stepAnsweredWithErrors = new MenuStepResponse(menu.GetStepAt(1), "matias");
             stepAnsweredWithErrors.ValidationErrors = new List<string>() {"Error1"};
             var menuTransaction = new MenuTransaction()
             {
                 MenuId = menu.MenuId,
                 MenuTransactionId = transactionId,
-                MenuStepAnswers = new List<MenuStepAnswer>() { stepAnsweredWithErrors }
+                MenuStepResponses = new List<MenuStepResponse>() { stepAnsweredWithErrors }
             };
             
             SetupMenuTransactionRepository_Get(transactionId, menuTransaction);
@@ -129,63 +125,4 @@ namespace OneMenu.Core.Test.Actions
                 .ReturnsAsync((MenuTransaction)menuTransaction);
         }
     }
-    
-   
-
-    public static class Data
-    {
-        private static readonly Fixture _fixture = new Fixture();
-        
-        private static readonly  Step step1 = new Step()
-        {
-            Text = "Ingrese su nombre",
-            Ordinal = 1,
-            InputType = InputType.TEXT,
-            IsLastStep = false
-        };
-
-        private static readonly  Step step2 = new Step()
-        {
-            Text = "es graduado?",
-            Ordinal = 2,
-            InputType = InputType.OPTIONS,
-            IsLastStep = false,
-            Options = new List<Option>()
-            {
-                new Option()
-                {
-                    DisplayText = "SI",
-                    Value = "SI"
-                },
-                new Option()
-                {
-                    DisplayText = "NO",
-                    Value = "NO"
-                }
-            },
-        };
-
-        private static readonly  Step step3 = new Step()
-        {
-            Text = "ingrese numero de legajo",
-            Ordinal = 3,
-            InputType = InputType.TEXT,
-            IsLastStep = true
-        };
-        
-        public  static  Menu Menu_Test = new Menu()
-        {
-            MenuId = _fixture.Create<string>(),
-            Label = "menu_test",
-            Text = "this is menu test",
-            Steps = new List<Step>()
-            {
-                step1,
-                step2,
-                step3
-            }
-        };
-    }
-    
-    
 }

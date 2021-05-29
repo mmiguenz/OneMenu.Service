@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,8 +32,12 @@ namespace OneMenu.Service
             });
             
             services.AddScoped<ListMenus, ListMenus>();
-            var mongoClient = GetMongoClient();
+            services.AddScoped<GetCurrentStepMenuTransaction, GetCurrentStepMenuTransaction>();
+            services.AddScoped<InitMenuTransaction, InitMenuTransaction>();
+            services.AddScoped<SaveStepMenuTransaction, SaveStepMenuTransaction>();
+          
             services.AddScoped<IMenuRepository, MenuRepository>();
+            services.AddScoped<IMenuTransactionRepository, MenuTransactionRepository>();
             services.Add(new ServiceDescriptor(typeof(MongoClient), (_) => GetMongoClient(), ServiceLifetime.Scoped));
             
             services.AddAutoMapper(typeof(MenuProfile));
@@ -40,8 +45,8 @@ namespace OneMenu.Service
 
         private MongoClient GetMongoClient()
         {
-          return  new MongoClient(
-                "mongodb+srv://mmiguenz-utn:BLtI2y6dY3gMWBxf@cluster0.2gopv.mongodb.net/onemenu?retryWrites=true&w=majority");
+            var connectionString = Environment.GetEnvironmentVariable("mongoConnection");
+            return  new MongoClient(connectionString);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

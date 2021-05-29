@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,7 +14,7 @@ namespace OneMenu.Core.Model
 
         public Step GetStepAt(int ordinal)
         {
-            return Steps.First(s => s.Ordinal == ordinal);
+           return Steps.FirstOrDefault(s => s.Ordinal == ordinal);
         }
     }
 

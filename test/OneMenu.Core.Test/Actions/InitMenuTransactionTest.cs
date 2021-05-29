@@ -33,7 +33,7 @@ namespace OneMenu.Core.Test.Actions
             _menuRepository.Setup(m => m.GetByLabel(menuLabel)).ReturnsAsync(menu);
 
             var expectedMenuTransactionCreated = _fixture.Build<MenuTransaction>()
-                .With(mt => mt.MenuStepAnswers, new List<MenuStepAnswer>())
+                .With(mt => mt.MenuStepResponses, new List<MenuStepResponse>())
                 .With(mt => mt.MenuId, menu.MenuId)
                 .Create();
 
@@ -43,7 +43,7 @@ namespace OneMenu.Core.Test.Actions
             
             Assert.Equal(expectedMenuTransactionCreated.MenuTransactionId, transactionIdCreated.MenuTransactionId);
             Assert.Equal(expectedMenuTransactionCreated.MenuId, transactionIdCreated.MenuId);
-            Assert.Empty(expectedMenuTransactionCreated.MenuStepAnswers);
+            Assert.Empty(expectedMenuTransactionCreated.MenuStepResponses);
             Assert.False(expectedMenuTransactionCreated.IsCompleted);
         }
     }

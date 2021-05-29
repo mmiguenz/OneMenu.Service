@@ -24,19 +24,20 @@ namespace OneMenu.Data.Repositories
 
         public async Task<IEnumerable<Menu>> GetAll()
         {
-            var result = await (await MenuCollection.FindAsync<MenuModel>(_ => true)).ToListAsync();
+            var result = await (await MenuCollection.FindAsync(_ => true)).ToListAsync();
             return _mapper.Map<List<MenuModel>, List<Menu>>(result);
         }
 
         public async Task<Menu> GetByLabel(string menuLabel)
         {
-            var result = await (await MenuCollection.FindAsync<MenuModel>(m => m.Label == menuLabel)).FirstAsync();
+            var result = await (await MenuCollection.FindAsync(m => m.Label == menuLabel)).FirstAsync();
             return _mapper.Map<MenuModel, Menu>(result);
         }
 
-        public Task<Menu> Get(string menuId)
+        public async Task<Menu> Get(string menuId)
         {
-            throw new System.NotImplementedException();
+            var result = await (await MenuCollection.FindAsync(m => m.MenuId == menuId)).FirstAsync();
+            return _mapper.Map<MenuModel, Menu>(result);
         }
     }
 }

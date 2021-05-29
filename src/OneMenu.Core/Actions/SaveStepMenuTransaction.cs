@@ -7,12 +7,12 @@ using OneMenu.Core.Repositories;
 
 namespace OneMenu.Core.actions
 {
-    public class SaveMenuStepResponse
+    public class SaveStepMenuTransaction
     {
         private readonly IMenuTransactionRepository _menuTransactionRepository;
         private readonly IMenuRepository _menuRepository;
 
-        public SaveMenuStepResponse(IMenuTransactionRepository menuTransactionRepository,
+        public SaveStepMenuTransaction(IMenuTransactionRepository menuTransactionRepository,
             IMenuRepository menuRepository)
         {
             _menuTransactionRepository = menuTransactionRepository;
@@ -25,9 +25,10 @@ namespace OneMenu.Core.actions
             var menu = await _menuRepository.Get(menuTransaction.MenuId);
             var currentStep = menu.GetStepAt(menuTransaction.CurrentStepOrdinal);
 
-            var stepResponse = new MenuStepAnswer(currentStep, response);
+            var stepResponse =  new MenuStepResponse(currentStep, response);
 
-            menuTransaction.MenuStepAnswers = menuTransaction.MenuStepAnswers.Append(stepResponse);
+            menuTransaction.AddStepResponse(stepResponse);
+            
             string completionMsg = "";
                 
             if (menuTransaction.IsCompleted)
@@ -37,14 +38,15 @@ namespace OneMenu.Core.actions
 
             return new SaveStepResult()
             {
-                CurrentStep = menu.GetStepAt(menuTransaction.CurrentStepOrdinal),
-                CompletionMsg  = completionMsg
+                CurrentStep = menuTransaction.IsCompleted ? null :  menu.GetStepAt(menuTransaction.CurrentStepOrdinal),
+                CompletionMsg  = completionMsg,
+                ValidationErrors = stepResponse.ValidationErrors
             };
         }
 
         private string ExecuteTransactionCommand()
         {
-            throw new System.NotImplementedException();
+            return "Transaction Completed";
         }
     }
 }
