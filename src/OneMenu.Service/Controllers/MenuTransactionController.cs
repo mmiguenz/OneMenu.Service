@@ -34,6 +34,8 @@ namespace OneMenu.Service.Controllers
         {
             try
             {
+                _logger.LogTrace("GetCurrentStep({menuTransactionId})", menuTransactionId);
+                
                 return await _getCurrentStepMenuTransaction.Execute(menuTransactionId);
             }
             catch (Exception ex)
@@ -46,6 +48,8 @@ namespace OneMenu.Service.Controllers
         [HttpPost("{menuLabel}")]
         public async Task<MenuTransaction> InitMenuTransaction(string menuLabel)
         {
+            _logger.LogTrace("InitMenuTransaction({menuLabel})", menuLabel);
+            
             try
             {
                 return await _initMenuTransaction.Execute(menuLabel);
@@ -60,6 +64,7 @@ namespace OneMenu.Service.Controllers
         [HttpPost("{menuTransactionId}/response")]
         public async Task<SaveStepResult> SaveStepResponse(string menuTransactionId, [FromBody] StepResponse stepResponse)
         {
+            _logger.LogTrace("SaveStepResponse({menuTransactionId}, {response})", menuTransactionId, stepResponse.Response);
             try
             {
                 return await _saveStepMenuTransaction.Execute(menuTransactionId, stepResponse.Response);

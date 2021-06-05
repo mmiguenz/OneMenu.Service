@@ -24,6 +24,7 @@ namespace OneMenu.Service.Controllers
         [HttpGet("all")]
         public async Task<IEnumerable<Menu>> GetAll()
         {
+            _logger.LogTrace("GetAll()");
             try
             {
                 return await _listMenuAction.Execute();
