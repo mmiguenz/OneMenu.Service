@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
 using OneMenu.Core.actions;
 using OneMenu.Core.Constants;
 using OneMenu.Core.Model;
+using OneMenu.Core.Model.Menus;
 using OneMenu.Core.Repositories;
 using OneMenu.Core.Test.util;
 using Xunit;
@@ -55,7 +57,7 @@ namespace OneMenu.Core.Test.Actions
         public async Task When_Save_LastStep_With_Success()
         {
             var transactionId = _fixture.Create<string>();
-            var lastStepResponse = _fixture.Create<string>();
+            var lastStepResponse = _fixture.Create<int>().ToString();
             var menu = MenuData.Menu_Test;
 
             var menuTransaction = new MenuTransaction()
@@ -84,13 +86,18 @@ namespace OneMenu.Core.Test.Actions
         public async Task When_Save_FirstStep_With_ValidationErrors()
         {
             var transactionId = _fixture.Create<string>();
-            var stepInvalidResponse = string.Empty;
+            var stepInvalidResponse = "AAA";
             var menu = MenuData.Menu_Test;
 
             var menuTransaction = new MenuTransaction()
             {
                 MenuId = menu.MenuId,
                 MenuTransactionId = transactionId,
+                MenuStepResponses = new List<MenuStepResponse>()
+                {
+                    new () { Step =  MenuData.step1, Response =  "response step 1"},
+                    new () { Step =  MenuData.step2, Response =  "response step 2"},
+                }
             };
 
             SetupMenuTransactionRepository_Get(transactionId, menuTransaction);
@@ -102,39 +109,8 @@ namespace OneMenu.Core.Test.Actions
             Assert.False(result.IsCompleted);
             Assert.Empty(result.CompletionMsg);
             Assert.NotEmpty(result.ValidationErrors);
-            StepsAreEqual(MenuData.step1, result.CurrentStep);
-        }
-
-        [Fact]
-        public async Task When_Save_LastStep_With_ValidationErrors()
-        {
-            var transactionId = _fixture.Create<string>();
-            var lastStepInvalidResponse = string.Empty;
-            var menu = MenuData.Menu_Test;
-
-            var menuTransaction = new MenuTransaction()
-            {
-                MenuId = menu.MenuId,
-                MenuTransactionId = transactionId,
-                MenuStepResponses = new List<MenuStepResponse>()
-                {
-                    new(MenuData.step1, _fixture.Create<string>()),
-                    new(MenuData.step2, _fixture.Create<string>())
-                }
-            };
-
-            SetupMenuTransactionRepository_Get(transactionId, menuTransaction);
-            SetupMenuRepository_Get(menu);
-
-            var result = await _saveStepMenuTransaction.Execute(transactionId, lastStepInvalidResponse);
-
-            Assert.True(result.HasErrors);
-            Assert.False(result.IsCompleted);
-            Assert.Empty(result.CompletionMsg);
-            Assert.NotEmpty(result.ValidationErrors);
             StepsAreEqual(MenuData.step3, result.CurrentStep);
         }
-
         private void SetupMenuRepository_Get(Menu menuToReturn)
         {
             _menuRepository

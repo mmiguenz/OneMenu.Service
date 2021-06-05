@@ -12,7 +12,7 @@ namespace OneMenu.Data.MongoModels
         [BsonElement("text")]
         public string Text { get; set; }
         [BsonElement("inputType")]
-        public int InputType { get; set; }
+        public string InputType { get; set; }
         [BsonElement("ordinal")]
         public int Ordinal { get; set; }
         [BsonElement("isLastStep")]
@@ -20,5 +20,8 @@ namespace OneMenu.Data.MongoModels
         [BsonIgnoreIfNull]
         [BsonElement("options")]
         public IEnumerable<OptionModel> Options { get; set; }
+        [BsonIgnoreIfNull]
+        [BsonElement("validations")]
+        public IEnumerable<ValidationModel> Validations { get; set; }
     }
 }

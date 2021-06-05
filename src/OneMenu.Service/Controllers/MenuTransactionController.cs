@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OneMenu.Core.actions;
 using OneMenu.Core.Model;
+using OneMenu.Core.Model.Menus;
 
 namespace OneMenu.Service.Controllers
 {

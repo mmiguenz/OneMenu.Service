@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
 using OneMenu.Core.actions;
 using OneMenu.Core.Model;
 using OneMenu.Core.Repositories;
+using OneMenu.Core.Test.util;
 using Xunit;
 
 namespace OneMenu.Core.Test.Actions
@@ -23,7 +25,7 @@ namespace OneMenu.Core.Test.Actions
         [Fact]
         public async Task ListMenus_Returns_A_ListOf_AvailableMenus()
         {
-            var menusToReturn = _fixture.CreateMany<Menu>();
+            var menusToReturn = new List<Menu>() {MenuData.Menu_Test};
             
             _menuRepository.Setup(m => m.GetAll()).ReturnsAsync(menusToReturn);
             

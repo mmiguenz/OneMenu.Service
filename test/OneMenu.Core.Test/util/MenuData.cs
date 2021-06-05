@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using AutoFixture;
 using OneMenu.Core.Constants;
 using OneMenu.Core.Model;
+using OneMenu.Core.Model.Menus;
+using OneMenu.Core.Model.Menus.Validations;
+using OnstringeMenu.Core.Constants;
 
 namespace OneMenu.Core.Test.util
 {
@@ -43,9 +46,11 @@ namespace OneMenu.Core.Test.util
             Text = "ingrese numero de legajo",
             Ordinal = 3,
             InputType = InputType.TEXT,
-            IsLastStep = true
+            IsLastStep = true,
+            Validations = new List<Validation>() { new RegexValidation("debe ingresar un valor numerico", "^[0-9]*$", ValidationType.Regex) }
         };
-        
+
+
         public  static  Menu Menu_Test = new Menu()
         {
             MenuId = _fixture.Create<string>(),

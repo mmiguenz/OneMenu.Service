@@ -1,9 +1,8 @@
 namespace OneMenu.Core.Constants
 {
-    public enum InputType
+    public static class InputType
     {
-        NO_INPUT = 0,
-        TEXT,
-        OPTIONS
+        public const string TEXT = "TEXT";
+        public const string OPTIONS = "OPTIONS";
     }
 }

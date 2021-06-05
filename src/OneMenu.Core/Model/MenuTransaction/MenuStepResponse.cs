@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using OneMenu.Core.Model.Menus;
 
 namespace OneMenu.Core.Model
 {
@@ -7,7 +8,7 @@ namespace OneMenu.Core.Model
     {
         public MenuStepResponse()
         {
-            
+            ValidationErrors = new List<string>();
         }
         public MenuStepResponse(Step step, string response)
         {
