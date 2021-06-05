@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using OneMenu.Core.actions;
+using OneMenu.Core.CompletionCommands;
 using OneMenu.Core.Repositories;
 using OneMenu.Data.AutoMapper;
 using OneMenu.Data.Repositories;
@@ -36,9 +37,10 @@ namespace OneMenu.Service
             services.AddScoped<GetCurrentStepMenuTransaction, GetCurrentStepMenuTransaction>();
             services.AddScoped<InitMenuTransaction, InitMenuTransaction>();
             services.AddScoped<SaveStepMenuTransaction, SaveStepMenuTransaction>();
-          
+            services.AddScoped<ITransactionCompleteCommand, SaveEntity>();
             services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<IMenuTransactionRepository, MenuTransactionRepository>();
+            services.AddScoped<ISaveTransactionRepository, SaveTransactionRepository>();
             services.Add(new ServiceDescriptor(typeof(MongoClient), (_) => GetMongoClient(), ServiceLifetime.Scoped));
             
             services.AddAutoMapper(typeof(MenuProfile));

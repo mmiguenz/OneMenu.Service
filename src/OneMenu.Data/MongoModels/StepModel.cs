@@ -17,6 +17,8 @@ namespace OneMenu.Data.MongoModels
         public int Ordinal { get; set; }
         [BsonElement("isLastStep")]
         public bool IsLastStep { get; set; }
+        [BsonElement("fieldName")]
+        public string FieldName { get; set; }
         [BsonIgnoreIfNull]
         [BsonElement("options")]
         public IEnumerable<OptionModel> Options { get; set; }

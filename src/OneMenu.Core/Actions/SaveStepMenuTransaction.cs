@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using OneMenu.Core.CompletionCommands;
 using OneMenu.Core.Model;
 using OneMenu.Core.Repositories;
 
@@ -11,12 +11,15 @@ namespace OneMenu.Core.actions
     {
         private readonly IMenuTransactionRepository _menuTransactionRepository;
         private readonly IMenuRepository _menuRepository;
+        private readonly IEnumerable<ITransactionCompleteCommand> _transactionCompleteCommands;
 
         public SaveStepMenuTransaction(IMenuTransactionRepository menuTransactionRepository,
-            IMenuRepository menuRepository)
+            IMenuRepository menuRepository,
+            IEnumerable<ITransactionCompleteCommand> transactionCompleteCommands )
         {
             _menuTransactionRepository = menuTransactionRepository;
             _menuRepository = menuRepository;
+            _transactionCompleteCommands = transactionCompleteCommands;
         }
 
         public async Task<SaveStepResult> Execute(string transactionId, string response)
@@ -30,10 +33,15 @@ namespace OneMenu.Core.actions
             menuTransaction.AddStepResponse(stepResponse);
             
             string completionMsg = "";
-                
+
             if (menuTransaction.IsCompleted)
-                completionMsg = ExecuteTransactionCommand();
-            
+            {
+                var transactionCommand =
+                    _transactionCompleteCommands.First(t => t.TransactionCompleteType == menu.TransactionCompleteCommand);
+
+                completionMsg = await transactionCommand.CompleteTransaction(menuTransaction);
+            }
+
             await _menuTransactionRepository.Save(menuTransaction);
 
             return new SaveStepResult()
@@ -42,11 +50,6 @@ namespace OneMenu.Core.actions
                 CompletionMsg  = completionMsg,
                 ValidationErrors = stepResponse.ValidationErrors
             };
-        }
-
-        private string ExecuteTransactionCommand()
-        {
-            return "Transaction Completed";
         }
     }
 }

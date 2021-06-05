@@ -56,6 +56,7 @@ namespace OneMenu.Core.Test.util
             MenuId = _fixture.Create<string>(),
             Label = "menu_test",
             Text = "this is menu test",
+            TransactionCompleteCommand = TransactionCompleteCommandType.SaveEntity,
             Steps = new List<Step>()
             {
                 step1,

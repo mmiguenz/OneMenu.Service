@@ -17,6 +17,8 @@ namespace OneMenu.Data.MongoModels
         public string Title { get; set; }
         [BsonElement("text")]
         public string Text { get; set; }
+        [BsonElement("completionCommand")]
+        public string TransactionCompleteCommand { get; set; }
         [BsonElement("steps")]
         public IEnumerable<StepModel> Steps { get; set; }
     }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
 using OneMenu.Core.actions;
+using OneMenu.Core.CompletionCommands;
 using OneMenu.Core.Constants;
 using OneMenu.Core.Model;
 using OneMenu.Core.Model.Menus;
@@ -18,14 +19,22 @@ namespace OneMenu.Core.Test.Actions
         private readonly SaveStepMenuTransaction _saveStepMenuTransaction;
         private readonly Mock<IMenuRepository> _menuRepository;
         private readonly Mock<IMenuTransactionRepository> _menuTransactionRepository;
+        private readonly Mock<ITransactionCompleteCommand> _transactionCompletedCommand;
         private readonly Fixture _fixture;
 
         public SaveStepMenuTransactionTest()
         {
             _menuRepository = new Mock<IMenuRepository>();
             _menuTransactionRepository = new Mock<IMenuTransactionRepository>();
+            _transactionCompletedCommand = new Mock<ITransactionCompleteCommand>();
+            
+            var completionCommands = new List<ITransactionCompleteCommand>()
+            {
+                _transactionCompletedCommand.Object
+            };
+            
             _saveStepMenuTransaction =
-                new SaveStepMenuTransaction(_menuTransactionRepository.Object, _menuRepository.Object);
+                new SaveStepMenuTransaction(_menuTransactionRepository.Object, _menuRepository.Object, completionCommands);
             _fixture = new Fixture();
         }
 
@@ -44,6 +53,7 @@ namespace OneMenu.Core.Test.Actions
 
             SetupMenuTransactionRepository_Get(transactionId, menuTransaction);
             SetupMenuRepository_Get(menu);
+            SetupCompletionCommand(menu, menuTransaction);
 
             var result = await _saveStepMenuTransaction.Execute(transactionId, stepResponse);
 
@@ -52,7 +62,6 @@ namespace OneMenu.Core.Test.Actions
             Assert.Empty(result.CompletionMsg);
             StepsAreEqual(MenuData.step2, result.CurrentStep);
         }
-
         [Fact]
         public async Task When_Save_LastStep_With_Success()
         {
@@ -73,6 +82,7 @@ namespace OneMenu.Core.Test.Actions
 
             SetupMenuTransactionRepository_Get(transactionId, menuTransaction);
             SetupMenuRepository_Get(menu);
+            SetupCompletionCommand(menu, menuTransaction);
 
             var result = await _saveStepMenuTransaction.Execute(transactionId, lastStepResponse);
 
@@ -123,6 +133,15 @@ namespace OneMenu.Core.Test.Actions
             _menuTransactionRepository
                 .Setup(r => r.Get(transactionId))
                 .ReturnsAsync((MenuTransaction) menuTransaction);
+        }
+        
+        private void SetupCompletionCommand(Menu menu, MenuTransaction menuTransaction)
+        {
+            _transactionCompletedCommand.Setup(t => t.TransactionCompleteType)
+                .Returns(menu.TransactionCompleteCommand);
+            
+            _transactionCompletedCommand.Setup(t => t.CompleteTransaction(menuTransaction))
+                .ReturnsAsync("Transaction Completed");
         }
 
         private void StepsAreEqual(Step expectedStep, Step currentStep)
